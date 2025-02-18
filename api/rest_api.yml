@@ -18,6 +18,17 @@ tags:
 
 components:
   schemas:
+    
+    Subscription:
+     type: object
+     properties:
+        subscruber_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        author_id:
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
     Post:
      type: object
      properties:
@@ -563,5 +574,129 @@ paths:
         '500':
           description: Internal server error
             
-    
-  
+  /subscription:
+    post:
+      tags:
+        - subscriptions
+      summary: Create new subscription
+      description: Create new subscription
+      operationId: createSubscription
+      requestBody:
+        description: subscription structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+        required: true
+      responses:
+        '201':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+          
+  /unsubscription:
+    post:
+      tags:
+        - subscriptions
+      summary: Unsubscribe 
+      description: unsubscribe
+      operationId: deleteSubscription
+      requestBody:
+        description: subscription structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+          
+  /media/upload:
+    post:
+      tags:
+        - media
+      summary: upload media
+      operationId: uploadMedia
+      requestBody:
+        content:
+          application/octeat-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  media_id:
+                    type: string
+                    format: uuid
+                    example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        '500':
+          description: Internal server error
+          
+  /locations:
+    get:
+      tags:
+        - locations
+      summary: get locations list
+      operationId: getLocations
+      parameters:
+        - name: query
+          in: query
+          description: search string
+          required: false
+          schema:
+            type: string
+            maxLength: 200
+        - name: longitude
+          in: query
+          description: longitude - coordinate of location
+          required: false
+          schema:
+            type: number
+        - name: latitude
+          in: query
+          description: latitude - coordinate of location
+          required: false
+          schema:
+            type: number
+        - name: limit
+          in: query
+          description: limit locations
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 20
+        - name: offset
+          in: query
+          description: offset locations
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsList'
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
