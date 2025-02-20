@@ -80,3 +80,36 @@ RPS read (комментарий) = 10 000 000 * 6 / 86 400 = 700 RPS
 Трафик на запись комментария = 1000 * 200B = 10000B/с = 200 KB/c
 Трафик на запись реакций = 2300 * 100B = 81000B/c = 230 KB/C
 
+Расчет дисков:
+
+Посты без медиа
+Capasity  =  180 * 86400 * 365 = 5 676 480 000 KB = 6 TB
+disk_capacity SSD (SATA) = 100 TB
+Disks_for_capacity = 6 / 100 = 0.06
+Disks_for_throughput = 180KB/c / 100 MB/c =  0,0018
+Disks_for_iops = 1920 / 1000 = 1.9
+Disks = 3 по 2 TB
+
+Медиа для постов
+Capasity  =  60 * 86400 * 365 = 1 892 160 000 MB = 1,9PB
+disk_capacity SSD (SATA) = 100 TB
+Disks_for_capacity = 1900 / 100 = 19
+Disks_for_throughput = 60 MB/c / 100 MB/c =  0.6
+Disks_for_iops = 1920 / 1000 = 1.9
+Disks = 22 по 100 TB
+
+Комментарии
+Capasity  =  200 * 86400 * 365 = 6 307 200 000 KB = 6.5 TB
+disk_capacity SSD (SATA) = 100 TB
+Disks_for_capacity =6.5 / 100 = 0.065
+Disks_for_throughput = 200 KB/c / 100 MB/c =  0,002
+Disks_for_iops = 2200 / 1000 = 2.2
+Disks = 3 по 3 TB
+
+Реакции 
+Capasity  =  230 * 86400 * 365 = 7 253 280 000 KB = 7.3 TB
+disk_capacity SSD (SATA) = 100 TB
+Disks_for_capacity =7.3 / 100 = 0.073
+Disks_for_throughput = 230 KB/c / 100 MB/c =  0,0023
+Disks_for_iops = 4100 / 1000 = 4.1
+Disks = 5 по 2 TB
