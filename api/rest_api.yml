@@ -1,0 +1,702 @@
+openapi: 3.0.3
+
+info:
+  title: Social Network V1 API
+  description: Api for home work 2
+  contact:
+    email: admin@email.ru
+  version: 1.0.0
+
+
+tags:
+  - name: posts
+  - name: reactions
+  - name: comments
+  - name: subscriptions
+  - name: media
+  - name: locations
+
+components:
+  schemas:
+    
+    Subscription:
+     type: object
+     properties:
+        subscruber_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        author_id:
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+    Post:
+     type: object
+     properties:
+        post_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        description:
+          type: string
+          example: "Yesterday, I returned from Africa."
+        user_id:
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        location_id:
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        media_ids:
+          type: array
+          description: ids of media for post
+          example: ["7790beb1-48e8-42ae-8017-d24a8180bee4","7790beb1-48e8-42ae-8017-d24a8180bee4"]
+          items:
+            type: string
+            format: uuid
+        created_at:
+            format: date-time
+            description: Post were created, timestamp by RFC3339
+            example: 2006-01-02T15:04:05.000000Z
+        updated_at:
+            format: date-time
+            description: Post were updated, timestamp by RFC3339
+            example: 2006-01-02T15:04:05.000000Z
+            
+    Comment:
+      type: object
+      properties:
+        comment_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        post_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        user_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        text:
+          type: string
+          example: "great place!"
+        created_at:
+            format: date-time
+            description: User were created, timestamp by RFC3339
+            example: 2006-01-02T15:04:05.000000Z
+        updated_at:
+            format: date-time
+            description: User were updated, timestamp by RFC3339
+            example: 2006-01-02T15:04:05.000000Z
+        
+    ReactionType:
+      type: string
+      enum:
+        - like
+        - dislike
+        - poop
+      
+    Reaction:
+      type: object
+      properties:
+        reaction_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        post_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        user_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        reaction_type:
+          $ref: '#/components/schemas/ReactionType'
+        created_at:
+            format: date-time
+            description: User were created, timestamp by RFC3339
+            example: 2006-01-02T15:04:05.000000Z
+        updated_at:
+            format: date-time
+            description: User were updated, timestamp by RFC3339
+            example: 2006-01-02T15:04:05.000000Z
+            
+    Location:
+      type: object
+      properties:
+        id: 
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        name:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+    
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+          example: 240
+        offset:
+          type: integer
+          format: int64
+          minimum: 0
+          example: 10
+        limit:
+          type: integer
+          format: int64
+          minimum: 0
+          example: 20
+          default: 20
+          
+    PostsList:
+      allOf:
+        - $ref: '#/components/schemas/Pagination'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Post'
+  
+    CommentsList:
+      allOf:
+        - $ref: '#/components/schemas/Pagination'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Comment'
+                
+    ReactionsList:
+      allOf:
+        - type: object
+          properties:
+            items:
+              type: array
+              items: 
+                type: object
+                properties:
+                  reaction_type: 
+                    $ref: '#/components/schemas/ReactionType'
+                  count:
+                    type: integer
+                
+    LocationsList:
+      allOf:
+        - $ref: '#/components/schemas/Pagination'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Location'
+                
+    PostAction:
+     type: object
+     properties:
+        description:
+          type: string
+          example: "Yesterday, I returned from Africa."
+        user_id:
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        location_id:
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        media_ids:
+          type: array
+          description: ids of media for post
+          example: ["7790beb1-48e8-42ae-8017-d24a8180bee4","7790beb1-48e8-42ae-8017-d24a8180bee4"]
+          items:
+            type: string
+            format: uuid
+    
+    CommentAction:
+      type: object
+      properties:
+        post_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        user_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        text:
+          type: string
+          example: "great place!"
+    
+    ReactionAction:
+      type: object
+      properties:
+        post_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        user_id:
+          type: string
+          format: uuid
+          example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        reaction_type:
+          $ref: '#/components/schemas/ReactionType'
+          
+paths:
+  /posts:
+    post:
+      tags:
+        - posts
+      summary: Create new post
+      description: Create new post
+      operationId: createPost
+      requestBody:
+        description: Post structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAction'
+        required: true
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+    get:
+      tags:
+        - posts
+      summary: Get Posts
+      description: Get posts by user_id or location_id
+      operationId: getPosts
+      parameters:
+        - name: user_id
+          in: query
+          description: User Id
+          schema:
+            type: string
+            format: uuid
+        - name: location_id
+          in: query
+          description: Location Id
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          description: Limit for pagination
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Offset for pagination
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostsList'
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+  /post/{post_id}:
+    put:
+      tags:
+        - posts
+      summary: Update post
+      description: Update  post
+      operationId: updatePost
+      parameters:
+        - name: post_id
+          in: path
+          description: Post Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Post structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAction'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - posts
+      summary: Delete post
+      description: Delete  post
+      operationId: deletePost
+      parameters:
+        - name: post_id
+          in: path
+          description: Post Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
+          
+  /comments:
+    post:
+      tags:
+        - comments
+      summary: Create new comment
+      description: Create new comment
+      operationId: createComment
+      requestBody:
+        description: Comment structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentAction'
+        required: true
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+    get:
+      tags:
+        - comments
+      summary: Get Comments
+      description: Get comments by post_id
+      operationId: getComments
+      parameters:
+        - name: post_id
+          in: query
+          description: Post Id
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          description: Limit for pagination
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Offset for pagination
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentsList'
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+  /comment/{comment_id}:
+    put:
+      tags:
+        - comments
+      summary: Update comment
+      description: Update  comment
+      operationId: updateComment
+      parameters:
+        - name: comment_id
+          in: path
+          description: comment Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Comment structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentAction'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - comments
+      summary: Delete comment
+      description: Delete  comment
+      operationId: deleteComment
+      parameters:
+        - name: comment_id
+          in: path
+          description: comment Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
+      
+  /reactions:
+    post:
+      tags:
+        - reactions
+      summary: Create new reaction
+      description: Create new reaction
+      operationId: createReaction
+      requestBody:
+        description: reaction structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReactionAction'
+        required: true
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reaction'
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+    get:
+      tags:
+        - reactions
+      summary: Get reactions
+      description: Get reactions by post_id
+      operationId: getReactions
+      parameters:
+        - name: post_id
+          in: query
+          description: Post Id
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          description: Limit for pagination
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Offset for pagination
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReactionsList'
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+  /reactions/{reaction_id}:
+    delete:
+      tags:
+        - reactions
+      summary: Delete reaction
+      description: Delete  reaction
+      operationId: deleteReaction
+      parameters:
+        - name: reaction_id
+          in: path
+          description: reaction Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
+            
+  /subscription:
+    post:
+      tags:
+        - subscriptions
+      summary: Create new subscription
+      description: Create new subscription
+      operationId: createSubscription
+      requestBody:
+        description: subscription structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+        required: true
+      responses:
+        '201':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+          
+  /unsubscription:
+    post:
+      tags:
+        - subscriptions
+      summary: Unsubscribe 
+      description: unsubscribe
+      operationId: deleteSubscription
+      requestBody:
+        description: subscription structure
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '422':
+          description: Validation error on input data
+        '500':
+          description: Internal server error
+          
+  /media/upload:
+    post:
+      tags:
+        - media
+      summary: upload media
+      operationId: uploadMedia
+      requestBody:
+        content:
+          application/octeat-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  media_id:
+                    type: string
+                    format: uuid
+                    example: "7790beb1-48e8-42ae-8017-d24a8180bee4"
+        '500':
+          description: Internal server error
+          
+  /locations:
+    get:
+      tags:
+        - locations
+      summary: get locations list
+      operationId: getLocations
+      parameters:
+        - name: query
+          in: query
+          description: search string
+          required: false
+          schema:
+            type: string
+            maxLength: 200
+        - name: longitude
+          in: query
+          description: longitude - coordinate of location
+          required: false
+          schema:
+            type: number
+        - name: latitude
+          in: query
+          description: latitude - coordinate of location
+          required: false
+          schema:
+            type: number
+        - name: limit
+          in: query
+          description: limit locations
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 20
+        - name: offset
+          in: query
+          description: offset locations
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsList'
+        '422':
+          description: Validation error on input data
+        '404':
+          description: Data not found
+        '500':
+          description: Internal server error
