@@ -93,11 +93,13 @@ Disks = 3 по 2 TB
 Медиа для постов
 Capasity  =  60 * 86400 * 365 = 1 892 160 000 MB = 1,9PB
 disk_capacity SSD (SATA) = 100 TB
+disk_capacity HDD = 32 TB
 Disks_for_capacity = 1900 / 100 = 19
+Disks_for_capacity HDD= 1900 / 32 = 60
 Disks_for_throughput = 60 MB/c / 100 MB/c =  0.6
 Disks_for_iops = 1920 / 1000 = 1.9
-Disks = 22 по 100 TB
-
+Disks горячее хранилище = 10 по 100 TB(ssd) 
+Disks холодное хранилище = 32 по 32 TB(hdd)
 Комментарии
 Capasity  =  200 * 86400 * 365 = 6 307 200 000 KB = 6.5 TB
 disk_capacity SSD (SATA) = 100 TB

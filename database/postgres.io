@@ -5,16 +5,13 @@ Table subscriptions {
   subscriber_id uuid
   created_at timestamp
   updated_at timestamp
-  deleted_at timestamp
 }
 
 Table users {
   id uuid [primary key]
   username varchar
-  role varchar
   created_at timestamp
   updated_at timestamp
-  deleted_at timestamp
 }
 
 Table posts {
@@ -24,7 +21,6 @@ Table posts {
   user_id uuid
   created_at timestamp
   updated_at timestamp
-  deleted_at timestamp
 }
 
 Table media_posts {
@@ -37,9 +33,9 @@ Table comments {
   post_id uuid
   user_id uuid
   message text
+  reply_comment_id uuid
   created_at timestamp
   updated_at timestamp
-  deleted_at timestamp
 }
 
 Table reactions {
@@ -48,10 +44,12 @@ Table reactions {
   user_id uuid
   reaction_id int
   created_at timestamp
-  deleted_at timestamp
-
 }
 
+Table reactions_types {
+  id int [primary key]
+  reaction string
+}
 
 Ref: posts.user_id > users.id 
 
@@ -67,4 +65,6 @@ Ref: posts.id <> media_posts.post_id
 Ref: posts.id < reactions.post_id
 Ref: users.id < reactions.user_id
 
+Ref: comments.id < comments.reply_comment_id
 
+Ref: reactions_types.id < reactions.reaction_id
