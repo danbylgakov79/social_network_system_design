@@ -115,3 +115,35 @@ Disks_for_capacity =7.3 / 100 = 0.073
 Disks_for_throughput = 230 KB/c / 100 MB/c =  0,0023
 Disks_for_iops = 4100 / 1000 = 4.1
 Disks = 5 по 2 TB
+
+БД:
+
+PostgreSQL: async + sync по одной реплики на каждый вид
+RF 3. Поскольку для надежности желательно размещать сервера в нескольких дц, то используем master-master.
+
+S3:
+Cross-Region Replication и sync
+RF 3. Поскольку для надежности желательно размещать сервера в нескольких дц, то используем master-master.
+
+Redis:
+async RF 2.
+Поскольку для надежности желательно размещать сервера в нескольких дц, то используем master-master.
+
+
+Шардировать будем postgres.
+Расчеты дисков:
+
+Посты:
+Комбинированный Key based по user_id.
+Hosts = 3 / 1 = 3
+Hosts_with_replication = 3 * 3 = 9
+
+Комментарии: 
+Комбинированный Key based по user_id.
+Hosts = 3 / 1 = 3
+Hosts_with_replication = 3 * 3 = 9
+
+Реакции: 
+Комбинированный Key based по user_id.
+Hosts = 5 / 1 = 5
+Hosts_with_replication = 3 * 5 = 15
